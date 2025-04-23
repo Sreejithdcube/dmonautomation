@@ -35,6 +35,11 @@ export class Devices {
 
   // Click the Delete button in the same row
   await row.getByRole('button', { name: 'Delete' }).click();
+   // Wait for confirmation modal and click "Delete" button
+   const modal = this.page.locator('.modal-content'); 
+   const confirmDeleteButton = modal.getByRole('button', { name: 'Delete' });
+   await confirmDeleteButton.waitFor({ state: 'visible' });
+   await confirmDeleteButton.click();
     }
   }
 
