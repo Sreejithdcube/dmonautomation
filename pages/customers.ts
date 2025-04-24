@@ -52,8 +52,8 @@ export class AddCustomers {
   }
 
   //private get closeButton() {
-   // return this.page.locator('button[type="button"]');
- // }
+  // return this.page.locator('button[type="button"]');
+  // }
   private get duplicateCustomerError() {
     return this.page.getByRole('status', { name: 'Customer already exists' });
   }
@@ -103,15 +103,15 @@ export class AddCustomers {
     await this.saveButton.click();
 
 
-  // Wait a bit to see if the error appears
-  await this.page.waitForTimeout(1000);
+    // Wait a bit to see if the error appears
+    await this.page.waitForTimeout(1000);
 
-  const errorVisible = await this.duplicateCustomerError.isVisible().catch(() => false);
-  if (errorVisible) {
-    console.warn('Customer already exists – skipping save.');
-    throw new Error('Customer already exists');
+    const errorVisible = await this.duplicateCustomerError.isVisible().catch(() => false);
+    if (errorVisible) {
+      console.warn('Customer already exists – skipping save.');
+      throw new Error('Customer already exists');
+    }
   }
-}
 
   // Email Validation Methods
   async verifyInvalidEmail(): Promise<void> {
@@ -145,8 +145,18 @@ export class AddCustomers {
 
   async verifyInvalidPhoneNumber(): Promise<void> {
     await this.navigateAndOpenForm();
-    await this.phoneNumberInput.fill('123');
+    await this.phoneNumberInput.fill('123456');
     await this.saveButton.click();
     await expect(this.validationErrors.phone).toBeVisible();
   }
+  async deleteCustomerByName(name: string) {
+   // Locate the table row that contains the customer's name
+   const row = this.page.locator(`//tr[td[text()="David don"]]`);
+   await row.locator('input[type="checkbox"][aria-label="Toggle select row"]').first().check();
+   await row.locator('button.button-common.button-icon.secondary:has(div >> text=Delete)').click();
+   // Confirm deletion in modal
+   const confirmDeleteButton = this.page.locator('button.button-common.button-icon.secondary:has(div >> text=Delete)');
+   //await confirmDeleteButton.waitFor({ state: 'visible' });
+   await confirmDeleteButton.click();
+ }
 }

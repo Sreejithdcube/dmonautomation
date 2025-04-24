@@ -67,3 +67,8 @@ test('Positive: Valid Email Passes Validation', async ({ page }) => {
   const userFormPage = new AddCustomers(page);
   await userFormPage.verifyValidEmail();
 });
+
+  test('Delete customers by name', async ({ page }) => {
+    const userFormPage = new AddCustomers(page);
+    await userFormPage.deleteCustomerByName('David don');
+});
